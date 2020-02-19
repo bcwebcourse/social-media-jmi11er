@@ -1,44 +1,19 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import css from './App.css';
 import Header from './Header.js';
 import Home from './Home.js';
 import Navbar from './Navbar.js';
 
 function App() {
   return (
-  <div>
-	<Header/>
-  <img src={logo} className="App-logo" alt="logo" />
-  <main>
+  <div className={css.container}>
+	  <Header/>
+    <main>
 	    <Home/>
-  </main>
-  <Navbar/>
-</div>
+    </main>
+    <Navbar/>
+  </div>
   );
 }
-/*className={css.container}*/
-/*
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.<br></br>
-          Testing adding text.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}*/
 
 export default App;
