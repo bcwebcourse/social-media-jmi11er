@@ -48,7 +48,9 @@ function App(){
     }
     else{
       console.log(page)
-      return(<Profile/>);
+      return(<Profile
+        store={store}
+      />);
     }
   }
   function render(){

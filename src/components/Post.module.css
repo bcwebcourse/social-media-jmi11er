@@ -69,7 +69,7 @@ div{
 .addComment input{
     background: none;
     border: none;
-    height: 16px;
+    height: 32px;
     outline: none;
     font:inherit;
     padding: 0;

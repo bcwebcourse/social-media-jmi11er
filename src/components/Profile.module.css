@@ -1,0 +1,54 @@
+.topInfo{
+    display: flex;
+    
+    align-items: center;
+
+    box-sizing: border-box;
+    top: 0;
+    width:100%;
+    height: 50px;
+
+    background-color: #fff;
+
+    padding:0px 0px;
+
+    font-size: 125%;
+}
+.profPic{
+    border-radius: 50%;
+    height: 160px;
+    padding: 25px;
+}
+.username{
+    padding: 20px;
+}
+img{
+    object-fit: cover;
+}
+div{
+    font-family: "Roboto";
+    font-size: xx-large;
+    vertical-align: middle;
+}
+.bio{
+    padding: 25px;
+}
+.info{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-sizing: border-box;
+    width:100%;
+    height: 44px;
+    padding:0px 18px;
+    
+
+    border-bottom: 1px solid #dbdbdb;
+    background-color: #fff;
+}
+.posts{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+}
