@@ -1,9 +1,13 @@
 import React, {useState} from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 import css from './App.module.css';
 
 import Header from './Header.js';
 import Home from './Home.js';
-import Navbar from './Navbar.js';
 import Explore from './Explore.js';
 import NewPost from './NewPost.js';
 import Activity from './Activity.js';
@@ -13,57 +17,8 @@ import initialStore from 'components/utils/initialStore';
 import uniqueId from 'components/utils/uniqueId';
 
 function App(){
-    const [page, setPage] = useState('home');
-    const [store, setStore] = useState(initialStore);
-    //this.addLike = this.addLike.bind(this);
-		//this.removeLike = this.removeLike.bind(this);
-  /*setPage = (current) => {
-    this.setState({page: current})
-  }*/
-  function renderMain(page){
-    if (page==='home'){
-      console.log(page)
-      return(<Home 
-        store={store}
-        onUnlike={addLike}
-        onLike={removeLike}
-        onComment={addComment}
-        />);
-    }
-    else if (page==='explore'){
-      console.log(page)
-      return(<Explore/>);
-    }
-    else if (page==='newpost'){
-      console.log(page)
-      return(<NewPost
-      store={store}
-      addPost={addPost}
-      cancelPost={cancelPost}
-      />);
-    }
-    else if (page==='activity'){
-      console.log(page)
-      return(<Activity/>);
-    }
-    else{
-      console.log(page)
-      return(<Profile
-        store={store}
-      />);
-    }
-  }
-  function render(){
-    return (
-      <div className={css.container}>
-        <Header/>
-        <main className={css.content}>
-          {renderMain(page)} 
-        </main>
-        <Navbar onNavChange={setPage}/>
-      </div>
-      );
-  }
+  const [store, setStore] = useState(initialStore);
+  //console.log(store);
   function addLike(postId){
     const like = {
         userId: store.currentUserId, 
@@ -96,10 +51,6 @@ function App(){
     });
   }
   function addPost(photo, desc){
-		// TODO:
-		// 1. Create a new post object (use uniqueId('post') to create an id)
-		// 2. Update the store 
-    // 3. Call setPage to come back to the home page
     console.log(photo,'PHOTO')
     const newpost ={
       id: uniqueId('post'),
@@ -114,11 +65,57 @@ function App(){
       ...store,
         posts:store.posts.concat(newpost)
     });
-    setPage('home');
   }
-	function cancelPost(){
-    setPage('home');
-	}
-  return render();
+  function addFollower(userId, followerId){
+    const newpair = {userId, followerId};
+    setStore({
+      ...store,
+      followers:store.followers.concat(newpair)
+    });
+  }
+  function removeFollower(userId, followerId){
+    setStore({
+      ...store,
+      //the spread simply passes the attributes of store that are not changed (so all but likes) into the new store so that the store isn't overwritten only to contain likes
+      followers: store.followers.filter(pair=>!(pair.userId===userId && pair.followerId===followerId))
+    });
+  }
+
+
+  return (
+		<Router basename={process.env.PUBLIC_URL}>
+      <div>
+        <Header/>
+      </div>
+			<div className={css.content}>
+        <Switch>
+          <Route path="/profile/:userId?">
+            <Profile 
+              store={store}
+              onFollow={addFollower}
+              onUnfollow={removeFollower}/>
+          </Route>
+          <Route path="/activity">
+            <Activity/>
+          </Route>
+          <Route path="/explore">
+            <Explore/>
+          </Route>
+          <Route path="/newpost">
+          <NewPost 
+            store={store} 
+            addPost={addPost}/>
+          </Route>
+          <Route path="/:postId?">
+          <Home 
+            store={store}
+            onUnlike={addLike}
+            onLike={removeLike}
+            onComment={addComment}/>
+          </Route>
+        </Switch>
+			</div>
+		</Router>
+	);
 }
 export default App;

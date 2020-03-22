@@ -1,12 +1,16 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
+import Navbar from './Navbar.js';
 //import css from './Home.module.css';
 //import publicUrl from 'utils/publicUrl';
 import Post from './Post';
 
 function Home(props) {
-  const {store} = props;
-  
-  function fineUser(post){
+  const store = props.store;
+  let {postId} = useParams();
+  const posts = postId===undefined? store.posts:store.posts.filter(post => post.id === postId);
+
+  function findUser(post){
     return store.users.find(user=>user.id===post.userId);
   }
   
@@ -23,11 +27,11 @@ function Home(props) {
   }
   return (
   <div>
-      {store.posts.sort((a,b)=>new Date(b.datetime) - new Date(a.datetime))
+      {posts.sort((a,b)=>new Date(b.datetime) - new Date(a.datetime))
       .map(post=>
 				<Post
 	        key={post.id}
-	        user={fineUser(post, store)}
+	        user={findUser(post, store)}
 	        post={post}
 	        comments={findComments(post, store)}
           likes={findLikes(post, store)}
@@ -35,6 +39,7 @@ function Home(props) {
           onUnlike={props.onUnlike}
           onComment={props.onComment} 
 	      />)}
+        <Navbar/>
     </div>
   );
 }

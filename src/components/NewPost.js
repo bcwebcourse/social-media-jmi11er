@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import css from './NewPost.module.css';
 import FileLoader from './FileLoader.js';
+import {
+  useHistory
+} from "react-router-dom";
 /*
       store={store}
       addPost={addPost}
@@ -11,7 +14,7 @@ function NewPost(props) {
   const [desc, setDesc] = useState('');
   const [photo, setPhoto] = useState(null);
   const [error, setError] = useState(''); // to show an error message
-
+  const history = useHistory();
   function handleFileDragEnter(e){
     setDragging(true);
   }
@@ -45,14 +48,14 @@ function NewPost(props) {
 		e.preventDefault();
 		// 2. Show error msg if failed and exit
 		props.addPost(photo, desc)
-		setError('');
+    setError('');
+    history.push('/');
   }
   function handleCancel(){
-    props.cancelPost()
+    history.goBack();
   }
   return (
     <div>
-        
         <div className={css.photo}>
           {!photo?  <div className={css.message}>Drop your image</div>:
                     <img src={photo} alt="New Post"/>}

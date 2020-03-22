@@ -1,4 +1,7 @@
 import React, {useState} from 'react';
+import {
+    Link
+  } from "react-router-dom";
 import css from './Post.module.css';
 import publicUrl from 'components/utils/publicUrl';
 import date from 'components/utils/timespan';
@@ -26,7 +29,9 @@ likes (self, count), and comments (an array, with each element having a userID a
     <div>
         <div className={css.topInfo}>
             <img className={css.profPic} src={publicUrl(props.user.photo)} alt="profPic"></img>
-            <b>{props.user.id}</b>
+            <Link className={css.username} key={props.user.id} to={"/profile/".concat(props.user.id)}>
+                <b>{props.user.id}</b>
+            </Link>
         </div>
         <div>
             <img className={css.postPic} src={publicUrl(props.post.photo)} alt="postPic"></img>
