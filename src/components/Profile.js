@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { StoreContext } from 'contexts/StoreContext';
 import {
   Link
 } from "react-router-dom";
@@ -8,25 +9,26 @@ import css from './Profile.module.css';
 import publicUrl from 'components/utils/publicUrl';
 import PostThumbnail from './PostThumbnail';
 function Profile(props) {
+  let {
+    posts, users, followers, currentUserId, 
+    addFollower, removeFollower
+  } = useContext(StoreContext);
+
   let {userId} = useParams();
-  const username = userId===undefined? props.store.currentUserId : userId;
-  const user = props.store.users.filter(u => u.id===username)[0];
-  const posts = props.store.posts.filter(post=>(post.userId===username));
-  const followers = (props.store.followers.filter(pairing=>(pairing.userId===username))).length;
-  const following = (props.store.followers.filter(pairing=>(pairing.followerId===username))).length;
-  let isFollowing = props.store.followers.some(pair => pair.userId===username&& pair.followerId===props.store.currentUserId );
-  console.log(isFollowing);
-  console.log(props.store.followers);
+  const username = userId===undefined? currentUserId : userId;
+  const user = users.filter(u => u.id===username)[0];
+  const postsFiltered = posts.filter(post=>(post.userId===username));
+  const followersFiltered = (followers.filter(pairing=>(pairing.userId===username))).length;
+  const following = (followers.filter(pairing=>(pairing.followerId===username))).length;
+  let isFollowing = followers.some(pair => pair.userId===username&& pair.followerId===currentUserId );
 
   function handleFollow(){
     console.log("follow")
-    props.onFollow(username, props.store.currentUserId);
-    console.log(props.store.followers);
+    addFollower(username, currentUserId);
   }
   function handleUnfollow(){
     console.log("unfollow")
-    props.onUnfollow(username, props.store.currentUserId);
-    console.log(props.store.followers);
+    removeFollower(username, currentUserId);
   }
 
   return (
@@ -49,17 +51,17 @@ function Profile(props) {
        </div>
        <div className={css.info}>
          <p>
-           {posts.length} posts
+           {postsFiltered.length} posts
          </p>
          <p>
-           {followers} followers
+           {followersFiltered} followers
          </p>
          <p>
           {following} following
          </p>
        </div>
        <div className={css.posts}>
-        {posts.sort((a,b)=>new Date(b.datetime) - new Date(a.datetime))
+        {postsFiltered.sort((a,b)=>new Date(b.datetime) - new Date(a.datetime))
         .map(post=>
           <Link key={post.id} to={"/".concat(post.id)}>
             <PostThumbnail photo={post.photo}/>

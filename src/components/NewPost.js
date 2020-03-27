@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useContext } from 'react';
+import { StoreContext } from 'contexts/StoreContext';
 import css from './NewPost.module.css';
 import FileLoader from './FileLoader.js';
 import {
@@ -10,6 +12,10 @@ import {
       cancelPost={cancelPost}
 */
 function NewPost(props) {
+  let {
+    addPost
+  } = useContext(StoreContext);
+
   const [dragging, setDragging] = useState(false); // to show a dragging effect
   const [desc, setDesc] = useState('');
   const [photo, setPhoto] = useState(null);
@@ -47,7 +53,7 @@ function NewPost(props) {
 		// TODO:
 		e.preventDefault();
 		// 2. Show error msg if failed and exit
-		props.addPost(photo, desc)
+		addPost(photo, desc)
     setError('');
     history.push('/');
   }
